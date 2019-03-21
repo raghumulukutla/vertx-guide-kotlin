@@ -1,6 +1,10 @@
 ### Vert.x ###
 .vertx/
 
+### Kotlin ###
+build/*
+
+
 ### Eclipse ###
 
 .metadata

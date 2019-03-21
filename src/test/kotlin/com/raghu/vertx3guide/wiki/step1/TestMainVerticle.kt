@@ -1,4 +1,4 @@
-package com.raghu.vertx3guide.wiki
+package com.raghu.vertx3guide.wiki.step1
 
 import io.vertx.core.Vertx
 import io.vertx.junit5.Timeout

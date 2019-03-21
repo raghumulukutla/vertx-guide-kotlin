@@ -2,7 +2,7 @@
 
 image:https://img.shields.io/badge/vert.x-3.6.3-purple.svg[link="https://vertx.io"]
 
-This application was generated using http://start.vertx.io
+Kotlin+Gradle implementation of https://github.com/vert-x3/vertx-guide-for-java-devs
 
 == Building
 
@@ -20,6 +20,12 @@ To run your application:
 ```
 ./gradlew clean run
 ```
+
+== Status
+
+(0 / 10) steps completed
+
+step-1 in progress
 
 == Help
 
