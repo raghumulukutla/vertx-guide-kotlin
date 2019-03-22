@@ -23,9 +23,9 @@ To run your application:
 
 == Status
 
-(0 / 10) steps completed
+(1 / 10) steps completed
 
-step-1 in progress
+
 
 == Help
 
