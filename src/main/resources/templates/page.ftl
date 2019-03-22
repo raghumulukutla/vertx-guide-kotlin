@@ -28,7 +28,7 @@
         <textarea class="form-control" id="markdown" name="markdown" rows="15">${rawContent}</textarea>
       </div>
       <button type="submit" class="btn btn-primary">Save</button>
-      <#if id != -1>
+      <#if id != "-1">
         <button type="submit" formaction="/delete" class="btn btn-danger float-right">Delete</button>
       </#if>
     </form>
