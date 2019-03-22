@@ -1,7 +1,8 @@
+import kotlin.reflect.jvm.internal.impl.descriptors.annotations.KotlinTarget
+
 plugins {
   id 'org.jetbrains.kotlin.jvm' version '1.3.20'
   id 'application'
-  id 'java'
   id 'com.github.johnrengelman.shadow' version '5.0.0'
 }
 
@@ -25,7 +26,8 @@ application {
 }
 
 
-def mainVerticleName = 'com.raghu.vertx3guide.wiki.step1.MainVerticle'
+def step1mainVerticleName = 'com.raghu.vertx3guide.wiki.step1.MainVerticle'
+def step2mainVerticleName = 'com.raghu.vertx3guide.wiki.step2.HttpServerVerticle'
 def watchForChange = 'src/**/*'
 def doOnChange = './gradlew classes'
 
@@ -79,7 +81,17 @@ compileTestKotlin {
 shadowJar {
   classifier = 'fat'
   manifest {
-    attributes 'Main-Verticle': mainVerticleName
+    if(project.hasProperty("step1")) {
+      attributes 'Main-Verticle': step1mainVerticleName
+    }
+    else if(project.hasProperty("step2")) {
+      attributes 'Main-Verticle': step2mainVerticleName
+    }
+    else {
+      println "Unknown Property"
+    }
+
+
   }
   mergeServiceFiles {
     include 'META-INF/services/io.vertx.core.spi.VerticleFactory'
@@ -94,5 +106,40 @@ test {
 }
 
 run {
-  args = ['run', mainVerticleName, "--redeploy=$watchForChange", "--launcher-class=$mainClassName", "--on-redeploy=$doOnChange"]
+  if(project.hasProperty("step1")) {
+    args = ['run', step1mainVerticleName, "--redeploy=$watchForChange", "--launcher-class=$mainClassName", "--on-redeploy=$doOnChange"]
+  }
+  else if(project.hasProperty("step2")) {
+    args = ['run', step2mainVerticleName, "--redeploy=$watchForChange", "--launcher-class=$mainClassName", "--on-redeploy=$doOnChange"]
+  }
+  else {
+    println "Unknown Property"
+  }
+  
+  
+
+
 }
+
+
+
+//
+//
+//task.resgister("step1") {
+//  group = 'Application'
+//  description = 'Runs step 1'
+//  doLast{
+//    println 'Hello from alpha'
+//  }
+//
+//}
+//
+//// some condition
+//if (project.hasProperty("doBeta")) {
+//  step1.finalizedBy run
+//}
+
+
+
+
+

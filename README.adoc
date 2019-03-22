@@ -6,7 +6,7 @@ Kotlin+Gradle implementation of https://github.com/vert-x3/vertx-guide-for-java-
 
 == Building
 
-To launch your tests:
+To launch your tests: [BROKEN]
 ```
 ./gradlew clean test
 ```
@@ -17,13 +17,26 @@ To package your application:
 ```
 
 To run your application:
+This guide has 10 steps, each of which can be individually built and run, like so:
 ```
-./gradlew clean run
+./gradlew run -P step1 // To run step 1
+```
+
+TO
+```
+./gradlew run -P step10 // To run step 10
 ```
 
 == Status
 
 (1 / 10) steps completed
+
+
+== Known bugs
+
+===== Step 1
+. MySQL update doesn't work (Error code 1175) - Most likely due to your MySQL DB safe mode configuration
+
 
 
 
