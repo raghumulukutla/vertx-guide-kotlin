@@ -26,7 +26,7 @@ import java.util.stream.Collectors
 
 class MainVerticle : AbstractVerticle() {
 
-  private lateinit var log: InternalLogger ;
+  private lateinit var log: InternalLogger
   val SQL_CREATE_PAGES_TABLE :String= "create table if not exists Pages (Id integer primary key, Name varchar(255) unique, Content mediumtext)"
   val SQL_GET_PAGE : String = "select Id, Content from Pages where Name = ?"
   val SQL_CREATE_PAGE : String= "insert into Pages values (NULL, ?, ?)"
@@ -265,6 +265,7 @@ class MainVerticle : AbstractVerticle() {
   private fun pageUpdateHandler(routingContext: RoutingContext):Future<Void> {
     val future:Future<Void> = Future.future()
     val id = routingContext.request().getParam("id")
+    log.info("id {$id}")
     val title = routingContext.request().getParam("title")
     val markdown = routingContext.request().getParam("markdown")
     val newPage = "yes" == routingContext.request().getParam("newPage")

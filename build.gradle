@@ -27,7 +27,7 @@ application {
 
 
 def step1mainVerticleName = 'com.raghu.vertx3guide.wiki.step1.MainVerticle'
-def step2mainVerticleName = 'com.raghu.vertx3guide.wiki.step2.HttpServerVerticle'
+def step2mainVerticleName = 'com.raghu.vertx3guide.wiki.step2.MainVerticle'
 def watchForChange = 'src/**/*'
 def doOnChange = './gradlew classes'
 
@@ -36,6 +36,9 @@ dependencies {
   implementation "io.vertx:vertx-mysql-postgresql-client:$vertxVersion"
   implementation "io.vertx:vertx-web:$vertxVersion"
   implementation "io.vertx:vertx-lang-kotlin:$vertxVersion"
+  // https://mvnrepository.com/artifact/io.vertx/vertx-stack-depchain
+
+
 
   // https://mvnrepository.com/artifact/io.vertx/vertx-web-templ-freemarker
   implementation "io.vertx:vertx-web-templ-freemarker:$vertxVersion"
