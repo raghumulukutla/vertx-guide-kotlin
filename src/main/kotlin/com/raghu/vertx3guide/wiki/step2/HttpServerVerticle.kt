@@ -14,7 +14,7 @@ import io.vertx.core.json.JsonObject
 import io.vertx.ext.web.Router
 import io.vertx.ext.web.RoutingContext
 import io.vertx.ext.web.handler.BodyHandler
-import io.vertx.ext.web.templ.freemarker.FreeMarkerTemplateEngine
+import io.vertx.ext.web.templ.FreeMarkerTemplateEngine
 import java.util.*
 
 class HttpServerVerticle : AbstractVerticle() {
@@ -23,7 +23,7 @@ class HttpServerVerticle : AbstractVerticle() {
   val CONFIG_WIKIDB_QUEUE = "wikidb.queue"
   var wikiDbQueue = "wikidb.queue"
 
-  private lateinit var templateEngine:FreeMarkerTemplateEngine
+  private lateinit var templateEngine: FreeMarkerTemplateEngine
 
   override fun start(startFuture: Future<Void>) {
     InternalLoggerFactory.setDefaultFactory(Slf4JLoggerFactory.INSTANCE)
@@ -40,7 +40,7 @@ class HttpServerVerticle : AbstractVerticle() {
     router.post("/create").handler{create_rc -> pageCreateHandler(create_rc)}
     router.post("/delete").handler{delete_rc -> pageDeleteHandler(delete_rc)}
     val portNumber = config().getInteger(CONFIG_HTTP_SERVER_PORT, 8080)
-    server.requestHandler(router)
+    server.requestHandler(router::accept)
       .listen(portNumber) {
         if(it.succeeded()) {
           log.info("HTTP server is running on port: $portNumber")
@@ -52,7 +52,7 @@ class HttpServerVerticle : AbstractVerticle() {
         }
       }
 
-    templateEngine = FreeMarkerTemplateEngine.create(vertx)
+    templateEngine = FreeMarkerTemplateEngine.create()
   }
 
   private fun indexHandler(routingContext: RoutingContext) {
@@ -62,7 +62,7 @@ class HttpServerVerticle : AbstractVerticle() {
         val body:JsonObject = reply.result().body() as JsonObject
         routingContext.put("title", "Wiki Home")
         routingContext.put("pages", body.getJsonArray("pages").list)
-        templateEngine.render(routingContext.data(), "templates/index.ftl") {
+        templateEngine.render(routingContext, "templates/index.ftl") {
           index_ar->
           if(index_ar.succeeded()) {
             routingContext.response().putHeader("Content-Type", "text/html")
@@ -101,7 +101,7 @@ class HttpServerVerticle : AbstractVerticle() {
         routingContext.put("content", Processor.process(rawContent))
         routingContext.put("timestamp", Date().toString())
         log.info("pageRenderingHandler: ${body.encodePrettily()}")
-        templateEngine.render(routingContext.data(), "templates/page.ftl") {
+        templateEngine.render(routingContext, "templates/page.ftl") {
           page_ar->
           if(page_ar.succeeded()) {
             routingContext.response().putHeader("Content-Type", "text/html")

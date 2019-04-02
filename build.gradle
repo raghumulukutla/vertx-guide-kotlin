@@ -1,9 +1,10 @@
 import kotlin.reflect.jvm.internal.impl.descriptors.annotations.KotlinTarget
 
 plugins {
-  id 'org.jetbrains.kotlin.jvm' version '1.3.20'
+  id 'org.jetbrains.kotlin.jvm' version '1.3.21'
   id 'application'
   id 'com.github.johnrengelman.shadow' version '5.0.0'
+  id "org.jetbrains.kotlin.kapt" version "1.3.21"
 }
 
 
@@ -16,8 +17,8 @@ repositories {
 }
 
 ext {
-  kotlinVersion = '1.3.20'
-  vertxVersion = '3.6.3'
+  kotlinVersion = '1.3.21'
+  vertxVersion = '3.5.4'
   junitJupiterEngineVersion = '5.4.0'
 }
 
@@ -26,8 +27,15 @@ application {
 }
 
 
+kapt {
+  useBuildCache = true
+}
+
+
+
 def step1mainVerticleName = 'com.raghu.vertx3guide.wiki.step1.MainVerticle'
 def step2mainVerticleName = 'com.raghu.vertx3guide.wiki.step2.MainVerticle'
+def step3mainVerticleName = 'com.raghu.vertx3guide.wiki.step3.MainVerticle'
 def watchForChange = 'src/**/*'
 def doOnChange = './gradlew classes'
 
@@ -43,12 +51,17 @@ dependencies {
   // https://mvnrepository.com/artifact/io.vertx/vertx-web-templ-freemarker
   implementation "io.vertx:vertx-web-templ-freemarker:$vertxVersion"
 
+//  implementation "io.vertx:vertx-web-templ-freemarker:3.6.3"
+
 
   // https://mvnrepository.com/artifact/com.github.rjeschke/txtmark
   implementation group: 'com.github.rjeschke', name: 'txtmark', version: '0.13'
 
 
-
+  kapt "io.vertx:vertx-service-proxy:$vertxVersion:processor"
+  kapt "io.vertx:vertx-codegen:$vertxVersion:processor"
+  implementation "io.vertx:vertx-codegen:$vertxVersion"
+  implementation "io.vertx:vertx-service-proxy:$vertxVersion"
 
 
 
@@ -90,8 +103,11 @@ shadowJar {
     else if(project.hasProperty("step2")) {
       attributes 'Main-Verticle': step2mainVerticleName
     }
+    else if(project.hasProperty("step3")) {
+      attributes 'Main-Verticle': step3mainVerticleName
+    }
     else {
-      println "Unknown Property"
+//      println "Unknown Property"
     }
 
 
@@ -115,8 +131,11 @@ run {
   else if(project.hasProperty("step2")) {
     args = ['run', step2mainVerticleName, "--redeploy=$watchForChange", "--launcher-class=$mainClassName", "--on-redeploy=$doOnChange"]
   }
+  else if(project.hasProperty("step3")) {
+    args = ['run', step3mainVerticleName, "--redeploy=$watchForChange", "--launcher-class=$mainClassName", "--on-redeploy=$doOnChange"]
+  }
   else {
-    println "Unknown Property"
+//    println "Unknown Property"
   }
   
   

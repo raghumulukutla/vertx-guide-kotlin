@@ -17,7 +17,7 @@ import io.vertx.ext.sql.SQLConnection
 import io.vertx.ext.web.Router
 import io.vertx.ext.web.RoutingContext
 import io.vertx.ext.web.handler.BodyHandler
-import io.vertx.ext.web.templ.freemarker.FreeMarkerTemplateEngine
+import io.vertx.ext.web.templ.FreeMarkerTemplateEngine
 import io.vertx.kotlin.core.json.json
 import io.vertx.kotlin.core.json.obj
 import java.util.*
@@ -67,7 +67,7 @@ class MainVerticle : AbstractVerticle() {
     // in vertx3, operations are non-blocking. So, we'll need to use futures as a signal
     // of completion together with compose to execute tasks sequentially.
 
-    templateEngine = FreeMarkerTemplateEngine.create(vertx)
+    templateEngine = FreeMarkerTemplateEngine.create()
 
     val steps = prepareDatabase().compose{startHttpServer()}
     steps.setHandler(startFuture.completer())
@@ -130,7 +130,7 @@ class MainVerticle : AbstractVerticle() {
     router.post("/delete").handler{delete_rc -> pageDeleteHandler(delete_rc)}
 
     server
-      .requestHandler(router)
+      .requestHandler(router::accept)
       .listen(8080) {
         if(it.succeeded()) {
           log.info("HTTP server running on port 8080")
@@ -158,7 +158,7 @@ class MainVerticle : AbstractVerticle() {
             routingContext.put("title", "WikiHome")
               .put("pages", pages)
 
-            templateEngine.render(routingContext.data(), "templates/index.ftl") {index_template ->
+            templateEngine.render(routingContext, "templates/index.ftl") {index_template ->
               if(index_template.succeeded()) {
                 routingContext.response().putHeader("Content-Type", "text/html")
                 val buffer = index_template.result().getString(0, index_template.result().length())
@@ -218,7 +218,7 @@ class MainVerticle : AbstractVerticle() {
             routingContext.put("timestamp", Date().toString())
 
 
-            templateEngine.render(routingContext.data(), "templates/page.ftl") { page_ar->
+            templateEngine.render(routingContext, "templates/page.ftl") { page_ar->
 
               if(page_ar.succeeded()) {
                 routingContext.response().putHeader("Content-Type", "text/html")

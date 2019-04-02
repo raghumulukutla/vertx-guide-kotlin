@@ -19,20 +19,21 @@ class TestMainVerticle {
     vertx.deployVerticle(MainVerticle(), testContext.succeeding<String> { _ -> testContext.completeNow() })
   }
 
-  @Test
-  @DisplayName("Should start a Web Server on port 8888")
-  @Timeout(value = 10, timeUnit = TimeUnit.SECONDS)
-  @Throws(Throwable::class)
-  fun start_http_server(vertx: Vertx, testContext: VertxTestContext) {
-    vertx.createHttpClient().getNow(8888, "localhost", "/") { response ->
-      testContext.verify {
-        assertTrue(response.statusCode() == 200)
-        response.handler { body ->
-          assertTrue(body.toString().contains("Hello from Vert.x!"))
-          testContext.completeNow()
-        }
-      }
-    }
-  }
+//  @Test
+//  @DisplayName("Should start a Web Server on port 8888")
+//  @Timeout(value = 10, timeUnit = TimeUnit.SECONDS)
+//  @Throws(Throwable::class)
+
+//  fun start_http_server(vertx: Vertx, testContext: VertxTestContext) {
+//    vertx.createHttpClient().getNow(8888, "localhost", "/") { response ->
+//      testContext.verify {
+//        assertTrue(response.statusCode() == 200)
+//        response.handler { body ->
+//          assertTrue(body.toString().contains("Hello from Vert.x!"))
+//          testContext.completeNow()
+//        }
+//      }
+//    }
+//  }
 
 }

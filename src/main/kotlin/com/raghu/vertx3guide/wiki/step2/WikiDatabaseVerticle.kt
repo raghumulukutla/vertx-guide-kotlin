@@ -206,7 +206,6 @@ class WikiDatabaseVerticle : AbstractVerticle() {
       else {
         reportQueryError(message, res.cause())
       }
-
     }
   }
 
